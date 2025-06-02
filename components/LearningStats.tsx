@@ -2,8 +2,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { supabase } from "@/lib/supabase";
+import { Card, CardContent } from "../components/ui/card";
+import { supabase } from "../lib/supabase";
 
 export default function LearningStats() {
   const [completed, setCompleted] = useState(0);
