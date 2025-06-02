@@ -1,16 +1,17 @@
 import { useState } from "react";
 import Calendar from "react-calendar";
-import type { TileArgs } from "react-calendar/dist/cjs/shared/types";
 import "react-calendar/dist/Calendar.css";
+
+type TileArgs = {
+  date: Date;
+  view: "month" | "year" | "decade" | "century";
+};
 
 export default function CalendarView() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const tileClassName = ({ date, view }: TileArgs) => {
-    if (
-      view === "month" &&
-      date.toDateString() === selectedDate.toDateString()
-    ) {
+    if (view === "month" && date.toDateString() === selectedDate.toDateString()) {
       return "bg-indigo-500 text-white rounded-full";
     }
     return null;
