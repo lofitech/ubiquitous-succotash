@@ -1,11 +1,12 @@
 import { useState } from "react";
-import Calendar, { CalendarTileProperties } from "react-calendar";
+import Calendar from "react-calendar";
+import type { TileArgs } from "react-calendar/dist/cjs/shared/types";
 import "react-calendar/dist/Calendar.css";
 
 export default function CalendarView() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-  const tileClassName = ({ date, view }: CalendarTileProperties) => {
+  const tileClassName = ({ date, view }: TileArgs) => {
     if (
       view === "month" &&
       date.toDateString() === selectedDate.toDateString()
@@ -20,11 +21,8 @@ export default function CalendarView() {
       <h3 className="text-lg font-bold mb-4">📅 Deine Lernaktivitäten</h3>
       <Calendar
         onChange={(value) => {
-          if (value instanceof Date) {
-            setSelectedDate(value);
-          } else if (Array.isArray(value)) {
-            setSelectedDate(value[0]);
-          }
+          if (value instanceof Date) setSelectedDate(value);
+          else if (Array.isArray(value)) setSelectedDate(value[0]);
         }}
         value={selectedDate}
         tileClassName={tileClassName}
