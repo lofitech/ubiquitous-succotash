@@ -1,0 +1,1 @@
+export default function LearningChart() { return <div>Chart</div> }
