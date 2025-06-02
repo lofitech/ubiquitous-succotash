@@ -1,42 +1,31 @@
-import { useEffect, useState } from "react";
-import Calendar from "react-calendar";
-import 'react-calendar/dist/Calendar.css';
-import { supabase } from "../lib/supabase";
+import { useState } from "react";
+import Calendar, { CalendarTileProperties } from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 export default function CalendarView() {
-  const [logDates, setLogDates] = useState<Date[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from("logtimes")
-        .select("timestamp")
-        .eq("user_id", user.id);
-
-      if (!error && data) {
-        const dates = data.map((entry: any) => new Date(entry.timestamp));
-        setLogDates(dates);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const tileClassName = ({ date, view }: { date: Date; view: string }) => {
-    if (view === "month" && logDates.find(d => d.toDateString() === date.toDateString())) {
-      return "bg-green-500 text-white rounded";
+  const tileClassName = ({ date, view }: CalendarTileProperties) => {
+    if (
+      view === "month" &&
+      date.toDateString() === selectedDate.toDateString()
+    ) {
+      return "bg-indigo-500 text-white rounded-full";
     }
     return null;
   };
 
   return (
-    <div className="bg-gray-800 text-white p-4 rounded mt-4">
+    <div className="bg-neutral-900 p-4 rounded-xl shadow-md w-full max-w-md mx-auto text-white">
       <h3 className="text-lg font-bold mb-4">📅 Deine Lernaktivitäten</h3>
       <Calendar
-        onChange={setSelectedDate}
+        onChange={(value) => {
+          if (value instanceof Date) {
+            setSelectedDate(value);
+          } else if (Array.isArray(value)) {
+            setSelectedDate(value[0]);
+          }
+        }}
         value={selectedDate}
         tileClassName={tileClassName}
       />
